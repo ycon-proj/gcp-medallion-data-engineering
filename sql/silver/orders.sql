@@ -13,7 +13,7 @@ SELECT
     returned_at,
     num_of_item,
     DATE(created_at) AS order_date,
-    CURRENT_TIMESTAMP() AS processed_at
+    CURRENT_TIMESTAMP() AS processed_at, 'THELOOK' AS source_system
 
 FROM
     `de-gcp-medallion-lab.bronze.orders`
