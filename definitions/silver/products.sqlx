@@ -1,0 +1,33 @@
+config {
+    type: "table",
+    schema: "silver",
+    name: "products",
+
+    assertions: {
+        uniqueKey: ["id"],
+        nonNull: [
+            "id",
+            "cost",
+            "category",
+            "retail_price"
+        ],
+    rowConditions: [
+        "cost > 0",
+        "retail_price > 0"
+        ]
+    }
+}
+
+SELECT
+    id,
+    CAST(cost AS NUMERIC) AS cost,
+    UPPER(TRIM(category)) AS category,
+    COALESCE(NULLIF(UPPER(TRIM(name)),''),'NÃO INFORMADO') AS name,
+    COALESCE(NULLIF(TRIM(brand),''),'SEM MARCA') AS brand,
+    CAST(retail_price AS NUMERIC) AS retail_price,
+    UPPER(TRIM(department)) AS department,
+    COALESCE(NULLIF(TRIM(sku),''),'MARCA NÃO INFORMADA') AS sku,
+    distribution_center_id,
+    CURRENT_TIMESTAMP() AS processed_at,
+    'THE LOOK' AS source_system,
+    FROM ${ref("bronze", "products")}
