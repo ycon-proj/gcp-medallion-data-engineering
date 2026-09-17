@@ -1,0 +1,17 @@
+config {
+  type: "assertion"
+}
+
+SELECT
+    oi.id,
+    oi.order_id
+
+FROM
+    ${ref("silver", "order_items")} oi
+
+LEFT JOIN
+    ${ref("silver", "orders")} o
+    ON oi.order_id = o.order_id
+
+WHERE
+    o.order_id IS NULL
