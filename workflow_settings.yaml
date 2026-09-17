@@ -1,0 +1,5 @@
+defaultProject: de-gcp-medallion-lab
+defaultDataset: silver
+defaultLocation: US
+defaultAssertionDataset: dataform_assertions
+dataformCoreVersion: 3.0.52
