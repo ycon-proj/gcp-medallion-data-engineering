@@ -1,0 +1,6 @@
+config {
+    type: "declaration",
+    database: "de-gcp-medallion-lab",
+    schema: "bronze",
+    name: "users"
+}
