@@ -1,0 +1,53 @@
+config {
+    type: "table",
+    schema: "silver",
+    name: "users",
+
+    assertions: {
+        uniqueKey: ["id"],
+        nonNull: [
+            "id",
+            "first_name",
+            "last_name",
+            "age",
+            "gender",
+            "city",
+            "state",
+            "country"
+        ],
+    rowConditions: [
+            "age > 0",
+            "age < 120"
+        ]
+    }
+}
+
+SELECT
+    id,
+    TRIM(first_name) AS first_name,
+    TRIM(last_name) AS last_name,
+    CONCAT(TRIM(first_name),' ', TRIM(last_name)) AS full_name,
+    LOWER(TRIM(email)) AS email,
+    age,
+    UPPER(TRIM(gender)) AS gender,
+    TRIM(state) AS state,
+    TRIM(street_address) AS street_address,
+    postal_code,
+    CASE WHEN 
+      city IS NULL
+      OR TRIM(city) = ''
+      OR LOWER(TRIM(city)) = 'null'
+      THEN 'CIDADE NÃO INFORMADA'
+      ELSE
+      TRIM(city)
+      END AS city,
+    TRIM(country) AS country,
+    latitude,
+    longitude,
+    UPPER(TRIM(traffic_source)) AS traffic_source,
+    created_at,
+    user_geom,
+    "THE LOOK" AS source_system,
+    CURRENT_TIMESTAMP() AS processed_at
+    FROM ${ref("bronze", "users")}
+
