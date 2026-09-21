@@ -1,0 +1,15 @@
+config {
+    type: "assertion"
+}
+
+SELECT
+    f.order_item_id,
+    d.date_key
+    FROM ${ref("gold", "fact_sales")} f
+
+    LEFT JOIN
+    ${ref("gold","dim_date")} d 
+    ON f.date_key = d.date_key
+
+    WHERE
+    d.date_key IS NULL
