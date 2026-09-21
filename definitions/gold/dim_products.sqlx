@@ -1,0 +1,38 @@
+config {
+    type:"table",
+    schema: "gold",
+    name: "dim_product",
+
+    assertions: {
+        uniqueKey: ["product_id"],
+
+        nonNull: [
+            "product_id",
+            "cost",
+            "category",
+            "name",
+            "brand",
+            "retail_price",
+            "department",
+            "sku",
+            "distribution_center_id"
+        ],
+
+        rowConditions: [
+            "cost >= 0",
+            "retail_price >= 0",
+        ]
+    }
+}
+
+SELECT
+    id AS product_id,
+    cost,
+    category,
+    name,
+    brand,
+    retail_price,
+    department,
+    sku,
+    distribution_center_id,
+    FROM ${ref("silver","products")}

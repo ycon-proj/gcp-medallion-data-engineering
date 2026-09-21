@@ -1,0 +1,48 @@
+config {
+    type:"table",
+    schema:"gold",
+    name: "fact_sales",
+
+    assertions: {
+        uniqueKey: ["order_item_id"],
+
+        nonNull: [
+            "order_item_id",
+            "order_id",
+            "user_id",
+            "product_id",
+            "qtd",
+            "status",
+            "order_date",
+            "sale_price",
+            "cost",
+        ],
+        rowConditions: [
+            "cost > 0",
+            "sale_price > 0"
+        ]       
+    }
+}
+
+SELECT
+    oi.id AS order_item_id,
+    oi.order_id,
+    oi.user_id,
+    oi.product_id,
+    oi.status,
+    CAST
+      (FORMAT_DATE('%Y%m%d', oi.order_date) AS INT64) AS date_key,
+    1 AS qtd,
+    ROUND(sale_price - p.cost,2) AS gross_sale,
+    oi.order_date,
+    oi.created_at,
+    oi.shipped_at,
+    oi.delivered_at,
+    oi.returned_at,
+    oi.sale_price,
+    p.cost
+    FROM ${ref("silver", "order_items")} oi
+
+    LEFT JOIN
+    ${ref("gold", "dim_product")} p 
+    ON oi.product_id = p.product_id

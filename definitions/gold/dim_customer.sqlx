@@ -1,0 +1,40 @@
+config {
+    type:"table",
+    schema: "gold",
+    name: "dim_customer",
+
+    assertions: {
+        uniqueKey: ["customer_id"],
+
+        nonNull:[
+            "customer_id",
+            "full_name",
+            "age",
+            "gender",
+            "state",
+            "city",
+            "country",
+            "latitude",
+            "longitude",
+            "traffic_source"
+        ],
+
+        rowConditions: [
+            "age > 0",
+            "age < 120"
+        ]
+    }
+}
+
+SELECT
+    id AS customer_id,
+    full_name,
+    age,
+    gender,
+    state,
+    city,
+    country,
+    latitude,
+    longitude,
+    traffic_source
+    FROM ${ref("silver","users")}

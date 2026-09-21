@@ -1,0 +1,48 @@
+config {
+    type:"table",
+    schema:"gold",
+    name:"dim_date",
+
+    assertions: {
+        uniqueKey:["date_key"],
+        nonNull:[
+            "date_key",
+            "data",
+            "ano",
+            "mes",
+            "dia",
+            "trimestre",
+            "semana"
+        ]
+    }
+}
+
+WITH limites AS (
+
+    SELECT
+        MIN(order_date) AS primeira_data,
+        MAX(order_date) AS ultima_data
+
+    FROM
+        ${ref("silver","order_items")}
+
+)
+
+SELECT
+    CAST(FORMAT_DATE('%Y%m%d', data) AS INT64) AS date_key,
+    data,
+    EXTRACT(YEAR FROM data) AS ano,
+    EXTRACT(MONTH FROM data) AS mes,
+    EXTRACT(DAY FROM data) AS dia,
+    EXTRACT(QUARTER FROM data) AS trimestre,
+    EXTRACT(ISOWEEK FROM data) AS semana,
+
+FROM
+    limites,
+
+    UNNEST(
+        GENERATE_DATE_ARRAY(
+            primeira_data,
+            ultima_data
+        )
+    ) AS data

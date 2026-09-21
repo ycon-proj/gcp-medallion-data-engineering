@@ -1,0 +1,17 @@
+config {
+    type:"assertion"
+}
+
+SELECT 
+    f.order_item_id,
+    c.customer_id
+    FROM 
+        ${ref("gold", "fact_sales")} f
+
+    LEFT JOIN
+        ${ref("gold", "dim_customer")} c
+        ON f.user_id = c.customer_id
+
+    WHERE
+        c.customer_id IS NULL
+
